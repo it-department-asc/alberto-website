@@ -362,7 +362,7 @@ export default function HomePage() {
                 <Button 
                   size="lg" 
                   variant="outline" 
-                  className="rounded-full px-8 py-6 border-background/30 text-background hover:bg-background/10" 
+                  className="rounded-full px-8 py-6 border-background/30 bg-transparent text-background hover:bg-background/10 hover:text-background" 
                   asChild
                 >
                   <Link href="/branches">
