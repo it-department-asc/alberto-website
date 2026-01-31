@@ -398,10 +398,19 @@ export default function ContactPage() {
                   Corporate Headquarters
                 </h3>
                 <p className="text-muted-foreground">
-                  123 Fashion Avenue, Makati City
+                  Quezon City, Metro Manila
                   <br />
-                  Metro Manila, Philippines
+                  Philippines
                 </p>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=J28V%2BFR+Quezon+City+Metro+Manila"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-foreground text-background rounded-xl font-medium hover:opacity-90 transition-opacity"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Get Directions
+                </a>
               </div>
             </div>
           </motion.div>

@@ -1,29 +1,142 @@
 "use client";
 
+import { useState, useMemo, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
-import BranchList from "@/components/BranchList";
 import { Card, CardContent } from "@/components/ui/card";
-import { MapPin, Phone, Clock, Store } from "lucide-react";
+import { MapPin, Store, Building2, Users, ChevronUp, Phone, Clock } from "lucide-react";
+import { BranchCard, BranchFilters, BranchDetailModal } from "@/components/branch-locator";
+import { branchData } from "@/lib/data/branches";
+import type { Branch, BranchFilters as BranchFiltersType } from "@/lib/types/branch";
+
+// Dynamically import the map component to avoid SSR issues with Leaflet
+const BranchMap = dynamic(
+  () => import("@/components/branch-locator/BranchMap"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-full w-full rounded-xl bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-amber-500 border-t-transparent rounded-full mx-auto mb-3"></div>
+          <p className="text-sm text-muted-foreground">Loading map...</p>
+        </div>
+      </div>
+    ),
+  }
+);
 
 const stats = [
-  { icon: Store, value: "80+", label: "Branches Nationwide" },
-  { icon: MapPin, value: "5", label: "Major Regions" },
-  { icon: Clock, value: "40+", label: "Years of Service" },
+  {
+    icon: Store,
+    value: branchData.length.toString(),
+    label: "Total Stores",
+    color: "text-amber-600",
+    bg: "bg-amber-50",
+  },
+  {
+    icon: MapPin,
+    value: [...new Set(branchData.map((b) => b.region))].length.toString(),
+    label: "Regions Covered",
+    color: "text-blue-600",
+    bg: "bg-blue-50",
+  },
+  {
+    icon: Building2,
+    value: [...new Set(branchData.map((b) => b.lessor))].length.toString(),
+    label: "Mall Partners",
+    color: "text-purple-600",
+    bg: "bg-purple-50",
+  },
+  {
+    icon: Users,
+    value: [...new Set(branchData.flatMap((b) => b.brands))].length.toString(),
+    label: "Brands Available",
+    color: "text-emerald-600",
+    bg: "bg-emerald-50",
+  },
 ];
 
 export default function BranchesPage() {
+  const [filters, setFilters] = useState<BranchFiltersType>({
+    search: "",
+    brand: "ALL",
+    lessor: "ALL",
+    region: "ALL",
+  });
+
+  const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
+  const [detailBranch, setDetailBranch] = useState<Branch | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  // Filter branches based on current filters
+  const filteredBranches = useMemo(() => {
+    let result = [...branchData];
+
+    // Search filter
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      result = result.filter(
+        (branch) =>
+          branch.mallName.toLowerCase().includes(searchLower) ||
+          branch.city.toLowerCase().includes(searchLower) ||
+          branch.province.toLowerCase().includes(searchLower) ||
+          branch.branchCode.toLowerCase().includes(searchLower) ||
+          branch.storeId.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Brand filter
+    if (filters.brand !== "ALL") {
+      result = result.filter((branch) => branch.brands.includes(filters.brand as any));
+    }
+
+    // Lessor filter
+    if (filters.lessor !== "ALL") {
+      result = result.filter((branch) => branch.lessor === filters.lessor);
+    }
+
+    // Region filter
+    if (filters.region !== "ALL") {
+      result = result.filter((branch) => branch.region === filters.region);
+    }
+
+    return result;
+  }, [filters]);
+
+  const handleSelectBranch = useCallback((branch: Branch) => {
+    setSelectedBranch(branch);
+  }, []);
+
+  const handleViewDetails = useCallback((branch: Branch) => {
+    setDetailBranch(branch);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    setDetailBranch(null);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <div className="pt-20">
+    <div className="pt-20 min-h-screen bg-gradient-to-b from-background to-secondary/30">
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-background via-secondary to-background relative overflow-hidden">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-background via-secondary to-background relative overflow-hidden">
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
-            backgroundSize: '40px 40px'
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)`,
+              backgroundSize: "40px 40px",
+            }}
+          />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -31,45 +144,44 @@ export default function BranchesPage() {
             className="max-w-4xl mx-auto text-center"
           >
             <span className="inline-block px-4 py-2 bg-secondary rounded-full text-sm font-medium text-muted-foreground mb-6">
-              Find Us
+              Store Locator
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-              Visit Our
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+              Find a Store
               <br />
-              <span className="text-muted-foreground">80 Branches Nationwide</span>
+              <span className="text-muted-foreground">Near You</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl mx-auto leading-relaxed">
-              From Metro Manila to Mindanao, Alberto Shoes is never far away. 
-              Find a store near you and experience our quality products and 
-              exceptional service firsthand.
+            <p className="text-base md:text-xl text-muted-foreground mt-6 max-w-2xl mx-auto leading-relaxed">
+              With {branchData.length} stores across the Philippines, quality
+              footwear from Alberto, GEOX, KYO, G&G, and Piccadilly is always
+              within reach.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+      <section className="py-8 md:py-12 bg-background">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Card className="border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 bg-card">
-                  <CardContent className="p-8 text-center">
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      className="w-14 h-14 mx-auto rounded-2xl bg-secondary flex items-center justify-center mb-4"
+                <Card className="border-0 shadow-sm hover:shadow-md transition-shadow duration-300">
+                  <CardContent className="p-4 md:p-6 text-center">
+                    <div
+                      className={`w-10 h-10 md:w-12 md:h-12 mx-auto rounded-xl ${stat.bg} flex items-center justify-center mb-2 md:mb-3`}
                     >
-                      <stat.icon className="w-7 h-7 text-foreground" />
-                    </motion.div>
-                    <div className="text-3xl font-bold text-foreground mb-1">
+                      <stat.icon className={`w-5 h-5 md:w-6 md:h-6 ${stat.color}`} />
+                    </div>
+                    <div className="text-2xl md:text-3xl font-bold text-foreground">
                       {stat.value}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-xs md:text-sm text-muted-foreground">
                       {stat.label}
                     </div>
                   </CardContent>
@@ -80,101 +192,83 @@ export default function BranchesPage() {
         </div>
       </section>
 
-      {/* Map Placeholder Section */}
-      <section className="py-16 bg-secondary">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Nationwide Coverage
-            </h2>
-            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-              Our branches span across the Philippine archipelago, ensuring that 
-              quality footwear is always within reach.
-            </p>
-          </motion.div>
+      {/* Main Content */}
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-4 md:px-6">
+          {/* Filters */}
+          <BranchFilters
+            filters={filters}
+            onFilterChange={setFilters}
+            totalResults={filteredBranches.length}
+          />
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto"
-          >
-            <div className="aspect-[16/9] rounded-3xl bg-card shadow-lg overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center p-8">
-                <div className="text-center">
-                  <div className="w-24 h-24 mx-auto rounded-full bg-secondary flex items-center justify-center mb-6">
-                    <MapPin className="w-12 h-12 text-foreground" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">
-                    Philippines Map
+          {/* Branch List + Map Layout */}
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Branch List */}
+            <div className="order-2 lg:order-1">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-foreground">
+                    Store Directory
                   </h3>
-                  <p className="text-muted-foreground mb-6">
-                    80 Store Locations Across All Major Islands
-                  </p>
-                  
-                  {/* Visual representation of regions */}
-                  <div className="flex flex-wrap justify-center gap-4 mt-8">
-                    {[
-                      { name: "Metro Manila", count: 20 },
-                      { name: "North Luzon", count: 12 },
-                      { name: "South Luzon", count: 18 },
-                      { name: "Visayas", count: 15 },
-                      { name: "Mindanao", count: 15 },
-                    ].map((region, index) => (
-                      <motion.div
-                        key={region.name}
-                        initial={{ opacity: 0, scale: 0 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1 }}
-                        className="px-4 py-3 rounded-xl bg-secondary"
-                      >
-                        <div className="text-lg font-bold text-foreground">{region.count}+</div>
-                        <div className="text-xs text-muted-foreground">{region.name}</div>
-                      </motion.div>
+                  <span className="text-sm text-muted-foreground">
+                    Showing {filteredBranches.length} stores
+                  </span>
+                </div>
+
+                {filteredBranches.length === 0 ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-12"
+                  >
+                    <Store className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                    <h4 className="text-lg font-medium text-foreground mb-2">
+                      No stores found
+                    </h4>
+                    <p className="text-sm text-muted-foreground">
+                      Try adjusting your filters to find more stores.
+                    </p>
+                  </motion.div>
+                ) : (
+                  <div className="grid gap-3 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                    {filteredBranches.map((branch, index) => (
+                      <BranchCard
+                        key={branch.storeId}
+                        branch={branch}
+                        isSelected={selectedBranch?.storeId === branch.storeId}
+                        onClick={() => {
+                          handleSelectBranch(branch);
+                          handleViewDetails(branch);
+                        }}
+                        index={index}
+                      />
                     ))}
                   </div>
-                </div>
+                )}
               </div>
             </div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Branch List Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Branch Directory
-            </h2>
-            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-              Click on a region to view all branches in that area
-            </p>
-          </motion.div>
-
-          <div className="max-w-4xl mx-auto">
-            <BranchList />
+            {/* Map */}
+            <div className="order-1 lg:order-2">
+              <div className="h-[400px] lg:h-[650px] sticky top-24">
+                <BranchMap
+                  branches={filteredBranches}
+                  selectedBranch={selectedBranch}
+                  onSelectBranch={handleSelectBranch}
+                  onViewDetails={handleViewDetails}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
+
+
       {/* Contact Info Section */}
-      <section className="py-24 bg-foreground text-background">
-        <div className="container mx-auto px-6">
+      <section className="py-16 bg-foreground text-background">
+        <div className="container mx-auto px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -182,35 +276,54 @@ export default function BranchesPage() {
             transition={{ duration: 0.8 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold">
+            <h2 className="text-2xl md:text-3xl font-bold">
               Can't Find a Branch Near You?
             </h2>
-            <p className="text-background/70 mt-6 text-lg">
-              Contact our customer service team for assistance in locating the 
-              nearest Alberto Shoes branch or for any other inquiries.
+            <p className="text-background/70 mt-4 text-base md:text-lg">
+              Contact our customer service team for assistance.
             </p>
             
-            <div className="grid md:grid-cols-2 gap-8 mt-12 max-w-2xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6 mt-8 max-w-xl mx-auto">
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-6 rounded-2xl bg-background/10"
+                className="p-5 rounded-2xl bg-background/10"
               >
-                <Phone className="w-8 h-8 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">Call Us</h3>
-                <p className="text-background/70">+63 (2) 8123 4567</p>
+                <Phone className="w-6 h-6 mx-auto mb-3" />
+                <h3 className="font-semibold mb-1">Call Us</h3>
+                <p className="text-background/70 text-sm">+63 (2) 8123 4567</p>
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.05 }}
-                className="p-6 rounded-2xl bg-background/10"
+                className="p-5 rounded-2xl bg-background/10"
               >
-                <Clock className="w-8 h-8 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2">Store Hours</h3>
-                <p className="text-background/70">10:00 AM - 9:00 PM Daily</p>
+                <Clock className="w-6 h-6 mx-auto mb-3" />
+                <h3 className="font-semibold mb-1">Store Hours</h3>
+                <p className="text-background/70 text-sm">10:00 AM - 9:00 PM Daily</p>
               </motion.div>
             </div>
           </motion.div>
         </div>
       </section>
+
+      {/* Detail Modal */}
+      <BranchDetailModal
+        branch={detailBranch}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
+
+      {/* Scroll to Top Button */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{
+          opacity: showScrollTop ? 1 : 0,
+          scale: showScrollTop ? 1 : 0,
+        }}
+        onClick={scrollToTop}
+        className="fixed bottom-6 right-6 w-12 h-12 bg-foreground text-background rounded-full shadow-lg flex items-center justify-center hover:bg-foreground/90 transition-colors z-50"
+      >
+        <ChevronUp className="w-6 h-6" />
+      </motion.button>
     </div>
   );
 }
