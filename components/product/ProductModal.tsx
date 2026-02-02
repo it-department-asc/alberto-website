@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -75,33 +74,6 @@ export default function ProductModal({
 
   const canAddToCart = product?.inStock && selectedSize && selectedColor;
 
-  const overlayVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-  };
-
-  const modalVariants = {
-    hidden: { opacity: 0, scale: 0.95, y: 20 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        damping: 25,
-        stiffness: 300,
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.95,
-      y: 20,
-      transition: {
-        duration: 0.2,
-      },
-    },
-  };
-
   if (!product) return null;
 
   const discountPercentage = product.originalPrice
@@ -110,34 +82,21 @@ export default function ProductModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <AnimatePresence>
-        {isOpen && (
-          <DialogContent
-            className="max-w-5xl w-[95vw] max-h-[90vh] p-0 gap-0 overflow-hidden bg-white rounded-2xl border-0 shadow-2xl"
-            asChild
-          >
-            <motion.div
-              variants={modalVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-            >
-              {/* Visually hidden title for accessibility */}
-              <DialogTitle className="sr-only">{product.name}</DialogTitle>
+      <DialogContent className="max-w-5xl w-[95vw] max-h-[90vh] p-0 gap-0 overflow-hidden bg-white rounded-2xl border-0 shadow-2xl">
+        {/* Visually hidden title for accessibility */}
+        <DialogTitle className="sr-only">{product.name}</DialogTitle>
 
-              {/* Close Button */}
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={onClose}
-                className="absolute right-4 top-4 z-50 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-colors"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5 text-gray-600" />
-              </motion.button>
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 z-50 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-colors hover:scale-110 active:scale-90"
+          aria-label="Close modal"
+        >
+          <X className="w-5 h-5 text-gray-600" />
+        </button>
 
-              <ScrollArea className="max-h-[90vh]">
-                <div className="grid md:grid-cols-2 gap-0">
+        <ScrollArea className="max-h-[90vh]">
+          <div className="grid md:grid-cols-2 gap-0">
                   {/* Left Side - Image Carousel */}
                   <div className="p-6 md:p-8 bg-gray-50/50">
                     <ImageCarousel
@@ -225,16 +184,13 @@ export default function ProductModal({
                         </h3>
                         <ul className="space-y-2">
                           {product.features.map((feature, index) => (
-                            <motion.li
+                            <li
                               key={index}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.1 }}
                               className="flex items-start gap-2 text-sm text-gray-600"
                             >
                               <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                               {feature}
-                            </motion.li>
+                            </li>
                           ))}
                         </ul>
                       </div>
@@ -276,31 +232,19 @@ export default function ProductModal({
 
                     {/* Action Buttons */}
                     <div className="flex gap-3">
-                      <motion.div
-                        whileHover={{ scale: canAddToCart ? 1.02 : 1 }}
-                        whileTap={{ scale: canAddToCart ? 0.98 : 1 }}
-                        className="flex-1"
-                      >
+                      <div className="flex-1">
                         <Button
                           onClick={handleAddToCart}
                           disabled={!canAddToCart || isAddingToCart}
                           className={cn(
-                            "w-full h-14 rounded-xl text-base font-semibold transition-all duration-300",
+                            "w-full h-14 rounded-xl text-base font-semibold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
                             addedToCart
                               ? "bg-green-500 hover:bg-green-600"
                               : "bg-gray-900 hover:bg-gray-800"
                           )}
                         >
                           {isAddingToCart ? (
-                            <motion.div
-                              animate={{ rotate: 360 }}
-                              transition={{
-                                duration: 1,
-                                repeat: Infinity,
-                                ease: "linear",
-                              }}
-                              className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                            />
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                           ) : addedToCart ? (
                             <>
                               <Check className="w-5 h-5 mr-2" />
@@ -313,18 +257,15 @@ export default function ProductModal({
                             </>
                           )}
                         </Button>
-                      </motion.div>
+                      </div>
 
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
+                      <div>
                         <Button
                           variant="outline"
                           size="icon"
                           onClick={handleWishlist}
                           className={cn(
-                            "w-14 h-14 rounded-xl border-2 transition-all duration-300",
+                            "w-14 h-14 rounded-xl border-2 transition-all duration-300 hover:scale-105 active:scale-95",
                             isWishlisted
                               ? "bg-red-50 border-red-200 text-red-500 hover:bg-red-100"
                               : "border-gray-200 hover:border-gray-300"
@@ -335,21 +276,18 @@ export default function ProductModal({
                             className={cn("w-5 h-5", isWishlisted && "fill-current")}
                           />
                         </Button>
-                      </motion.div>
+                      </div>
 
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
+                      <div>
                         <Button
                           variant="outline"
                           size="icon"
-                          className="w-14 h-14 rounded-xl border-2 border-gray-200 hover:border-gray-300"
+                          className="w-14 h-14 rounded-xl border-2 border-gray-200 hover:border-gray-300 hover:scale-105 active:scale-95 transition-all duration-300"
                           aria-label="Share product"
                         >
                           <Share2 className="w-5 h-5" />
                         </Button>
-                      </motion.div>
+                      </div>
                     </div>
 
                     {/* Validation Message */}
@@ -385,10 +323,7 @@ export default function ProductModal({
                   </div>
                 </div>
               </ScrollArea>
-            </motion.div>
-          </DialogContent>
-        )}
-      </AnimatePresence>
+            </DialogContent>
     </Dialog>
   );
 }

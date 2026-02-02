@@ -3,184 +3,215 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import ProductCard from "@/components/ProductCard";
+import { FashionProductModal } from "@/components/fashion-modal";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { FashionProduct } from "@/lib/types/fashion-product";
 
-interface Product {
+interface ProductItem {
   id: number;
   title: string;
   description: string;
   image: string;
   category: string;
   subcategory: string;
+  // Fashion modal fields
+  brand: string;
+  tagline: string;
+  materials: string[];
+  highlights: string[];
+  colors: Array<{
+    name: string;
+    hex: string;
+  }>;
+  images: string[];
+  moodImage?: string;
 }
 
-const products: Product[] = [
+const products: ProductItem[] = [
   // Dress Sandals
   {
     id: 1,
     title: "Elegant Evening Sandal",
-    description: "Sophisticated design perfect for formal occasions and evening events",
+    description: "Sophistication meets comfort in this exquisitely crafted evening sandal. Designed for the modern woman who appreciates timeless elegance, every detail speaks to our commitment to quality and style. The graceful silhouette and premium materials create a statement piece that transitions seamlessly from formal occasions to elegant evenings.",
     image: "/images/dress-sandal-1.jpg",
     category: "women",
     subcategory: "Dress Sandals",
+    brand: "G&G",
+    tagline: "Where elegance meets everyday luxury",
+    materials: ["Premium Italian Leather", "Cushioned Insole", "Non-slip Rubber Sole"],
+    highlights: [
+      "Crafted for all-day comfort",
+      "Breathable premium leather",
+      "Elegant minimalist design",
+      "Versatile styling options",
+      "Handcrafted finishing",
+    ],
+    colors: [
+      { name: "Black", hex: "#000000" },
+      { name: "Nude", hex: "#D2B48C" },
+    ],
+    images: ["/images/dress-sandal-1.jpg", "/images/dress-sandal-1-2.jpg", "/images/dress-sandal-1-3.jpg"],
   },
   {
     id: 2,
     title: "Classic Strappy Sandal",
-    description: "Timeless strappy design with comfortable heel for all-day wear",
+    description: "A timeless strappy design that embodies understated sophistication. Each strap is carefully positioned to provide both visual appeal and exceptional support. This sandal represents the perfect balance between fashion-forward design and everyday practicality.",
     image: "/images/dress-sandal-2.jpg",
     category: "women",
     subcategory: "Dress Sandals",
+    brand: "G&G",
+    tagline: "Timeless design, modern comfort",
+    materials: ["Soft Leather Upper", "Memory Foam Footbed", "Durable Sole Construction"],
+    highlights: [
+      "Adjustable straps for perfect fit",
+      "Arch support technology",
+      "Lightweight construction",
+      "Easy on/off design",
+    ],
+    colors: [
+      { name: "Black", hex: "#000000" },
+      { name: "Gold", hex: "#FFD700" },
+    ],
+    images: ["/images/dress-sandal-2.jpg", "/images/dress-sandal-2-2.jpg"],
   },
   {
     id: 3,
     title: "Pearl Accent Sandal",
-    description: "Delicate pearl embellishments for a touch of elegance",
+    description: "Delicate pearl embellishments transform this sandal into a work of art. Each pearl is thoughtfully placed to catch the light and add a touch of refined glamour. Perfect for special occasions or whenever you want to feel extraordinary.",
     image: "/images/dress-sandal-3.jpg",
     category: "women",
     subcategory: "Dress Sandals",
+    brand: "G&G",
+    tagline: "Subtle luxury in every step",
+    materials: ["Premium Satin", "Genuine Pearl Accents", "Padded Leather Insole"],
+    highlights: [
+      "Hand-placed pearl details",
+      "Comfortable padded footbed",
+      "Premium satin finish",
+      "Perfect for special occasions",
+    ],
+    colors: [
+      { name: "White", hex: "#FFFFFF" },
+      { name: "Silver", hex: "#C0C0C0" },
+    ],
+    images: ["/images/dress-sandal-3.jpg", "/images/dress-sandal-3-2.jpg"],
   },
   // Wedges
   {
     id: 4,
     title: "Summer Platform Wedge",
-    description: "Comfortable platform wedge perfect for summer outings",
+    description: "Embrace the warmth of summer with this beautifully designed platform wedge. The elevated silhouette adds height while maintaining exceptional comfort. Crafted with summer adventures in mind, this wedge pairs effortlessly with flowing dresses or casual denim.",
     image: "/images/wedge-1.jpg",
     category: "women",
     subcategory: "Wedges",
+    brand: "PICCADILLY",
+    tagline: "Elevate your summer style",
+    materials: ["Natural Jute Platform", "Soft Leather Straps", "Comfort Tech Footbed"],
+    highlights: [
+      "Platform design for added height",
+      "Comfort technology cushioning",
+      "Summer-ready materials",
+      "Secure ankle support",
+    ],
+    colors: [
+      { name: "Beige", hex: "#F5F5DC" },
+      { name: "Brown", hex: "#8B4513" },
+    ],
+    images: ["/images/wedge-1.jpg", "/images/wedge-1-2.jpg"],
   },
   {
     id: 5,
     title: "Cork Wedge Sandal",
-    description: "Natural cork heel with soft leather straps for casual elegance",
+    description: "Natural cork meets artisanal craftsmanship in this stunning wedge design. The organic texture of cork provides both visual interest and lightweight comfort. Soft leather straps wrap the foot in luxury while maintaining a casual, effortless aesthetic.",
     image: "/images/wedge-2.jpg",
     category: "women",
     subcategory: "Wedges",
+    brand: "PICCADILLY",
+    tagline: "Natural beauty, refined comfort",
+    materials: ["Sustainable Cork Heel", "Soft Napa Leather", "Eco-conscious Sole"],
+    highlights: [
+      "Natural cork material",
+      "Butter-soft leather straps",
+      "Sustainable design approach",
+      "All-day wearability",
+    ],
+    colors: [
+      { name: "Natural", hex: "#DEB887" },
+      { name: "Black", hex: "#000000" },
+    ],
+    images: ["/images/wedge-2.jpg", "/images/wedge-2-2.jpg"],
   },
   {
     id: 6,
     title: "Espadrille Wedge",
-    description: "Classic espadrille style with modern comfort features",
+    description: "A classic espadrille reimagined with modern comfort features. The traditional rope-wrapped platform meets contemporary cushioning technology. This versatile wedge captures Mediterranean charm while delivering the support you need for any adventure.",
     image: "/images/wedge-3.jpg",
     category: "women",
     subcategory: "Wedges",
+    brand: "PICCADILLY",
+    tagline: "Mediterranean charm meets modern comfort",
+    materials: ["Traditional Rope Platform", "Canvas Upper", "Advanced Comfort Insole"],
+    highlights: [
+      "Classic espadrille styling",
+      "Modern comfort features",
+      "Versatile seasonal wear",
+      "Lightweight construction",
+    ],
+    colors: [
+      { name: "White", hex: "#FFFFFF" },
+      { name: "Navy", hex: "#000080" },
+    ],
+    images: ["/images/wedge-3.jpg", "/images/wedge-3-2.jpg"],
   },
-  // Pumps
-  {
-    id: 7,
-    title: "Classic Stiletto Pump",
-    description: "Iconic stiletto heel for the confident modern woman",
-    image: "/images/pump-1.jpg",
-    category: "women",
-    subcategory: "Pumps",
-  },
-  {
-    id: 8,
-    title: "Block Heel Pump",
-    description: "Stable block heel combining style with all-day comfort",
-    image: "/images/pump-2.jpg",
-    category: "women",
-    subcategory: "Pumps",
-  },
-  {
-    id: 9,
-    title: "Pointed Toe Kitten Heel",
-    description: "Elegant kitten heel with sophisticated pointed toe",
-    image: "/images/pump-3.jpg",
-    category: "women",
-    subcategory: "Pumps",
-  },
-  // Men's Formal
+  // Men's products
   {
     id: 10,
     title: "Oxford Dress Shoe",
-    description: "Classic oxford style in premium leather for formal occasions",
+    description: "The quintessential gentleman's shoe, redefined for the modern era. This Oxford represents the pinnacle of formal footwear craftsmanship, featuring time-honored construction techniques and premium materials. Every stitch tells a story of dedication to excellence.",
     image: "/images/formal-1.jpg",
     category: "men",
     subcategory: "Men's Formal Shoes",
-  },
-  {
-    id: 11,
-    title: "Derby Business Shoe",
-    description: "Versatile derby design perfect for business settings",
-    image: "/images/formal-2.jpg",
-    category: "men",
-    subcategory: "Men's Formal Shoes",
-  },
-  {
-    id: 12,
-    title: "Cap Toe Oxford",
-    description: "Distinguished cap toe detailing for the modern gentleman",
-    image: "/images/formal-3.jpg",
-    category: "men",
-    subcategory: "Men's Formal Shoes",
-  },
-  // Loafers
-  {
-    id: 13,
-    title: "Penny Loafer",
-    description: "Timeless penny loafer in soft premium leather",
-    image: "/images/loafer-1.jpg",
-    category: "men",
-    subcategory: "Loafers",
-  },
-  {
-    id: 14,
-    title: "Tassel Loafer",
-    description: "Sophisticated tassel detail for a refined casual look",
-    image: "/images/loafer-2.jpg",
-    category: "men",
-    subcategory: "Loafers",
-  },
-  {
-    id: 15,
-    title: "Suede Driving Loafer",
-    description: "Comfortable driving loafer in luxurious suede",
-    image: "/images/loafer-3.jpg",
-    category: "men",
-    subcategory: "Loafers",
+    brand: "ALBERTO",
+    tagline: "Distinguished craftsmanship for the modern gentleman",
+    materials: ["Full-grain Leather", "Goodyear Welt Construction", "Leather Sole"],
+    highlights: [
+      "Premium leather craftsmanship",
+      "Traditional Goodyear welt",
+      "Formal elegance",
+      "Timeless silhouette",
+      "Exceptional durability",
+    ],
+    colors: [
+      { name: "Black", hex: "#000000" },
+      { name: "Brown", hex: "#8B4513" },
+    ],
+    images: ["/images/formal-1.jpg", "/images/formal-1-2.jpg", "/images/formal-1-3.jpg"],
   },
   // Bags
   {
     id: 16,
     title: "Classic Tote Bag",
-    description: "Spacious tote perfect for work and everyday use",
+    description: "Spacious sophistication defines this essential tote bag. Designed to transition seamlessly from boardroom to weekend brunch, it offers generous interior space without compromising on style. Premium materials and thoughtful details make this tote a worthy companion for your daily journey.",
     image: "/images/bag-1.jpg",
     category: "bags",
     subcategory: "Bags",
-  },
-  {
-    id: 17,
-    title: "Crossbody Shoulder Bag",
-    description: "Versatile crossbody design for hands-free convenience",
-    image: "/images/bag-2.jpg",
-    category: "bags",
-    subcategory: "Bags",
-  },
-  {
-    id: 18,
-    title: "Evening Clutch",
-    description: "Elegant clutch perfect for special occasions",
-    image: "/images/bag-3.jpg",
-    category: "bags",
-    subcategory: "Bags",
-  },
-  {
-    id: 19,
-    title: "Structured Handbag",
-    description: "Professional structured bag for the modern businesswoman",
-    image: "/images/bag-4.jpg",
-    category: "bags",
-    subcategory: "Bags",
-  },
-  {
-    id: 20,
-    title: "Casual Hobo Bag",
-    description: "Relaxed hobo style for everyday casual wear",
-    image: "/images/bag-5.jpg",
-    category: "bags",
-    subcategory: "Bags",
+    brand: "KYO",
+    tagline: "Everyday elegance, effortless style",
+    materials: ["Premium Vegan Leather", "Gold-tone Hardware", "Microfiber Lining"],
+    highlights: [
+      "Spacious interior compartment",
+      "Durable construction",
+      "Versatile styling",
+      "Comfortable shoulder straps",
+      "Multiple interior pockets",
+    ],
+    colors: [
+      { name: "Black", hex: "#000000" },
+      { name: "Brown", hex: "#8B4513" },
+      { name: "Beige", hex: "#F5F5DC" },
+    ],
+    images: ["/images/bag-1.jpg", "/images/bag-1-2.jpg", "/images/bag-1-3.jpg"],
   },
 ];
 
@@ -204,12 +235,24 @@ const subcategories = [
 export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [activeSubcategory, setActiveSubcategory] = useState("All");
+  const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredProducts = products.filter((product) => {
     const categoryMatch = activeCategory === "all" || product.category === activeCategory;
     const subcategoryMatch = activeSubcategory === "All" || product.subcategory === activeSubcategory;
     return categoryMatch && subcategoryMatch;
   });
+
+  const handleViewProduct = (product: ProductItem) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
 
   return (
     <div className="pt-20">
@@ -238,7 +281,7 @@ export default function ProductsPage() {
               <span className="text-muted-foreground">Perfect Style</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mt-6 max-w-2xl mx-auto leading-relaxed">
-              Explore our curated collection of premium footwear and bags, 
+              Explore our curated collection of premium footwear and bags,
               designed to complement every occasion and elevate your personal style.
             </p>
           </motion.div>
@@ -308,6 +351,7 @@ export default function ProductsPage() {
                   description={product.description}
                   image={product.image}
                   category={product.subcategory}
+                  onViewDetails={() => handleViewProduct(product)}
                 />
               </motion.div>
             ))}
@@ -425,6 +469,25 @@ export default function ProductsPage() {
           </div>
         </div>
       </section>
+
+      {/* Product Modal */}
+      <FashionProductModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        product={selectedProduct ? {
+          id: selectedProduct.id.toString(),
+          name: selectedProduct.title,
+          brand: selectedProduct.brand,
+          tagline: selectedProduct.tagline,
+          description: selectedProduct.description,
+          materials: selectedProduct.materials,
+          highlights: selectedProduct.highlights,
+          colors: selectedProduct.colors,
+          images: selectedProduct.images,
+          moodImage: selectedProduct.moodImage,
+        } : null}
+      />
+
     </div>
   );
 }

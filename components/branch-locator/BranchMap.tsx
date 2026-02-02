@@ -116,8 +116,28 @@ export default function BranchMap({
 
         // Create popup content
         const popupContent = document.createElement("div");
-        popupContent.style.cssText = "min-width: 240px; padding: 4px;";
+        popupContent.style.cssText = "min-width: 250px; min-height: 140px; padding: 12px; position: relative;";
         popupContent.innerHTML = `
+          <button onclick="this.closest('.leaflet-popup').remove()" style="
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            color: #6b7280;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 1000;
+          " onmouseover="this.style.background='#f9fafb'; this.style.color='#374151'" onmouseout="this.style.background='white'; this.style.color='#6b7280'">×</button>
           <div style="margin-bottom: 12px;">
             <h4 style="font-weight: 700; font-size: 15px; color: #1f2937; margin: 0 0 6px 0; line-height: 1.3;">${branch.mallName}</h4>
             <p style="font-size: 13px; color: #6b7280; margin: 0; display: flex; align-items: center; gap: 4px;">
@@ -162,7 +182,7 @@ export default function BranchMap({
         // Bind popup with auto-open behavior
         const popup = L.popup({
           maxWidth: 280,
-          closeButton: true,
+          closeButton: false,
           autoClose: true,
           className: "custom-popup",
         }).setContent(popupContent);
@@ -199,7 +219,7 @@ export default function BranchMap({
           padding: 0;
         }
         .custom-popup .leaflet-popup-content {
-          margin: 14px;
+          margin: 0;
         }
         .custom-popup .leaflet-popup-tip {
           box-shadow: 0 4px 10px rgba(0,0,0,0.1);
