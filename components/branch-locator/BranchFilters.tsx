@@ -73,15 +73,15 @@ export default function BranchFiltersComponent({
       className="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden mb-6"
     >
       {/* Header */}
-      <div className="bg-gradient-to-r from-gray-900 to-gray-800 px-5 py-4">
+      <div className="bg-secondary border-t border-border px-5 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center">
-              <SlidersHorizontal className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 bg-gray-100 backdrop-blur rounded-xl flex items-center justify-center">
+              <SlidersHorizontal className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-white text-lg">Find a Store</h3>
-              <p className="text-gray-300 text-sm">Search from {totalResults} locations</p>
+              <h3 className="font-bold text-lg">Find a Store</h3>
+              <p className="text-gray-400 text-sm">Search from {totalResults} locations</p>
             </div>
           </div>
           {hasActiveFilters && (

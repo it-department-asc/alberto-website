@@ -9,19 +9,22 @@ interface ProductCardProps {
   description: string;
   image: string;
   category?: string;
+  onViewDetails?: () => void;
 }
 
-export default function ProductCard({ title, description, image, category }: ProductCardProps) {
+export default function ProductCard({ title, description, image, category, onViewDetails }: ProductCardProps) {
   return (
     <motion.div
       whileHover={{ y: -8 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
+      className="cursor-pointer"
+      onClick={onViewDetails}
     >
       <Card className="group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-shadow duration-500 bg-card">
         <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
           {/* Placeholder gradient when no actual image */}
           <div className="absolute inset-0 bg-gradient-to-br from-muted to-secondary" />
-          
+
           {/* Image placeholder with icon */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center p-6">
