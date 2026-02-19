@@ -65,7 +65,7 @@ export const sampleProducts: Product[] = [
   {
     id: "3",
     name: "Casual Leather Loafers",
-    brand: "G&G",
+    brand: "ALBERTO",
     category: "Men's Casual Shoes",
     price: 2795,
     description:

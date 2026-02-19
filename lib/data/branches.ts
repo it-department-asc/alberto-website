@@ -1117,18 +1117,18 @@ export const branchData: Branch[] = [
   },
 
   // G&G STAND ALONE
-  {
-    storeId: "GG001",
-    branchCode: "GNG2LAUNION",
-    region: "Ilocos",
-    province: "La Union",
-    city: "San Fernando City",
-    lessor: "Robinsons",
-    mallName: "Robinsons Place La Union",
-    brands: ["G&G"],
-    branchType: "STAND ALONE",
-    coordinates: getCoordinates("Robinsons Place La Union"),
-  },
+  // {
+  //   storeId: "GG001",
+  //   branchCode: "GNG2LAUNION",
+  //   region: "Ilocos",
+  //   province: "La Union",
+  //   city: "San Fernando City",
+  //   lessor: "Robinsons",
+  //   mallName: "Robinsons Place La Union",
+  //   brands: ["G&G"],
+  //   branchType: "STAND ALONE",
+  //   coordinates: getCoordinates("Robinsons Place La Union"),
+  // },
 
   // KYO STAND ALONE
   {

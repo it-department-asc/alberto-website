@@ -37,7 +37,7 @@ const products: ProductItem[] = [
     image: "/images/dress-sandal-1.jpg",
     category: "women",
     subcategory: "Dress Sandals",
-    brand: "G&G",
+    brand: "ALBERTO",
     tagline: "Where elegance meets everyday luxury",
     materials: ["Premium Italian Leather", "Cushioned Insole", "Non-slip Rubber Sole"],
     highlights: [
@@ -60,7 +60,7 @@ const products: ProductItem[] = [
     image: "/images/dress-sandal-2.jpg",
     category: "women",
     subcategory: "Dress Sandals",
-    brand: "G&G",
+    brand: "ALBERTO",
     tagline: "Timeless design, modern comfort",
     materials: ["Soft Leather Upper", "Memory Foam Footbed", "Durable Sole Construction"],
     highlights: [
@@ -82,7 +82,7 @@ const products: ProductItem[] = [
     image: "/images/dress-sandal-3.jpg",
     category: "women",
     subcategory: "Dress Sandals",
-    brand: "G&G",
+    brand: "ALBERTO",
     tagline: "Subtle luxury in every step",
     materials: ["Premium Satin", "Genuine Pearl Accents", "Padded Leather Insole"],
     highlights: [

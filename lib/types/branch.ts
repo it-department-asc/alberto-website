@@ -1,4 +1,4 @@
-export type Brand = "ALBERTO" | "G&G" | "KYO" | "GEOX" | "PICCADILLY";
+export type Brand = "ALBERTO" | /* "G&G" | */ "KYO" | "GEOX" | "PICCADILLY";
 
 export type BranchType = "STAND ALONE" | "HYBRID";
 
@@ -25,7 +25,7 @@ export interface BranchFilters {
   region: string;
 }
 
-export const BRANDS: Brand[] = ["ALBERTO", "G&G", "KYO", "GEOX", "PICCADILLY"];
+export const BRANDS: Brand[] = ["ALBERTO", /* "G&G", */ "KYO", "GEOX", "PICCADILLY"];
 
 export const LESSORS = [
   "SM",
