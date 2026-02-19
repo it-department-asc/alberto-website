@@ -1,379 +1,240 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
-import HeroSection from "@/components/HeroSection";
-import ProductCard from "@/components/ProductCard";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, MapPin, Star, Heart, ShoppingBag } from "lucide-react";
+import { useState } from "react";
+import {
+  FashionHero,
+  CampaignSection,
+  NewArrivalsCarousel,
+  BrandSpotlightCarousel,
+  BrandLogoStrip,
+  ParallaxSection,
+} from "@/components/homepage";
+import { FashionProductModal } from "@/components/fashion-modal";
+import type { FashionProduct } from "@/lib/types/fashion-product";
 
-const categories = [
+// Sample products for New Arrivals - featuring all brands
+const newArrivals: FashionProduct[] = [
+  // {
+  //   id: "1",
+  //   name: "Elegant Evening Sandal",
+  //   brand: "G&G",
+  //   tagline: "Where elegance meets everyday luxury",
+  //   description: "Sophistication meets comfort in this exquisitely crafted evening sandal. Designed for the modern woman who appreciates timeless elegance, every detail speaks to our commitment to quality and style.",
+  //   materials: ["Premium Italian Leather", "Cushioned Insole", "Non-slip Rubber Sole"],
+  //   highlights: [
+  //     "Crafted for all-day comfort",
+  //     "Breathable premium leather",
+  //     "Elegant minimalist design",
+  //     "Versatile styling options",
+  //   ],
+  //   colors: [
+  //     { name: "Black", hex: "#000000" },
+  //     { name: "Nude", hex: "#D2B48C" },
+  //   ],
+  //   images: ["/images/products/gg-sandal-1.jpg", "/images/products/gg-sandal-2.jpg"],
+  // },
   {
-    title: "Women's Collection",
-    description: "Elegant sandals, trendy wedges, and fashionable pumps for the modern Filipina",
-    image: "/images/womens.jpg",
-    category: "Women",
+    id: "2",
+    name: "Metropolitan Loafer",
+    brand: "URBAN MUSE",
+    tagline: "City chic redefined",
+    description: "For the urban explorer who refuses to compromise. These loafers blend metropolitan sophistication with everyday comfort, designed for women who move through life with purpose.",
+    materials: ["Soft Napa Leather", "Memory Foam Footbed", "Flexible Sole"],
+    highlights: [
+      "Slip-on convenience",
+      "All-day comfort technology",
+      "Modern minimalist aesthetic",
+      "Versatile day-to-night wear",
+    ],
+    colors: [
+      { name: "Cognac", hex: "#8B4513" },
+      { name: "Black", hex: "#000000" },
+    ],
+    images: ["/images/products/urban-muse-loafer-1.jpg"],
   },
   {
-    title: "Men's Collection",
-    description: "Sophisticated formal shoes and comfortable loafers for the distinguished gentleman",
-    image: "/images/mens.jpg",
-    category: "Men",
+    id: "3",
+    name: "Breathable Oxford",
+    brand: "GEOX",
+    tagline: "The shoe that breathes",
+    description: "Revolutionary technology meets Italian design. Geox's patented breathable soles ensure comfort from morning to night, proving that innovation and style can coexist beautifully.",
+    materials: ["Premium Leather Upper", "Patented Breathable Technology", "Italian Craftsmanship"],
+    highlights: [
+      "Patented breathable technology",
+      "Italian design excellence",
+      "Professional versatility",
+      "Climate comfort system",
+    ],
+    colors: [
+      { name: "Brown", hex: "#8B4513" },
+      { name: "Black", hex: "#000000" },
+    ],
+    images: ["/images/products/geox-oxford-1.jpg"],
   },
   {
-    title: "Bags Collection",
-    description: "Stylish and functional bags to complement your every outfit and occasion",
-    image: "/images/bags.jpg",
-    category: "Bags",
+    id: "4",
+    name: "Minimalist Mule",
+    brand: "KYO",
+    tagline: "Contemporary craft",
+    description: "Minimalist aesthetics meet exceptional craftsmanship. KYO creates footwear that speaks softly but carries unmistakable presence, for those who appreciate understated luxury.",
+    materials: ["Smooth Leather", "Padded Insole", "Low Block Heel"],
+    highlights: [
+      "Clean architectural lines",
+      "Premium leather finish",
+      "Effortless slip-on style",
+      "Timeless design approach",
+    ],
+    colors: [
+      { name: "White", hex: "#FFFFFF" },
+      { name: "Taupe", hex: "#C4B7A6" },
+    ],
+    images: ["/images/products/kyo-mule-1.jpg"],
   },
-];
-
-const features = [
   {
-    icon: Star,
-    title: "Premium Quality",
-    description: "Crafted with the finest materials for lasting comfort and style",
+    id: "5",
+    name: "Comfort Platform",
+    brand: "PICCADILLY",
+    tagline: "Comfort without compromise",
+    description: "Brazilian innovation meets global style. Piccadilly has revolutionized comfortable footwear, proving that you never have to choose between feeling good and looking great.",
+    materials: ["Ultra-Soft Upper", "Ergonomic Footbed", "Shock-Absorbing Sole"],
+    highlights: [
+      "Superior comfort technology",
+      "Lightweight construction",
+      "Ergonomic design",
+      "Fashion-forward styling",
+    ],
+    colors: [
+      { name: "Blush", hex: "#E8C4B8" },
+      { name: "Black", hex: "#000000" },
+    ],
+    images: ["/images/products/piccadilly-platform-1.jpg"],
   },
   {
-    icon: Heart,
-    title: "Customer First",
-    description: "Dedicated service ensuring your complete satisfaction",
+    id: "6",
+    name: "Statement Heel",
+    brand: "VIZZANO",
+    tagline: "Bold & beautiful",
+    description: "For the woman who makes an entrance. Vizzano creates statement pieces that celebrate femininity and confidence, designed to turn heads and spark conversations.",
+    materials: ["High-Shine Finish", "Padded Comfort Insole", "Sculpted Heel"],
+    highlights: [
+      "Statement-making design",
+      "Comfortable padded insole",
+      "Sculpted heel detail",
+      "Special occasion ready",
+    ],
+    colors: [
+      { name: "Red", hex: "#B22222" },
+      { name: "Gold", hex: "#D4AF37" },
+    ],
+    images: ["/images/products/vizzano-heel-1.jpg"],
   },
   {
-    icon: ShoppingBag,
-    title: "Wide Selection",
-    description: "From casual to formal, find your perfect pair",
+    id: "7",
+    name: "Everyday Ballet Flat",
+    brand: "MOLECA",
+    tagline: "Everyday elegance",
+    description: "Accessible luxury for the modern woman. Moleca brings fashion-forward designs within reach, ensuring every woman can step out in style, every single day.",
+    materials: ["Soft Synthetic Upper", "Flexible Outsole", "Comfort Lining"],
+    highlights: [
+      "Versatile everyday style",
+      "Flexible construction",
+      "Easy care materials",
+      "Budget-friendly luxury",
+    ],
+    colors: [
+      { name: "Navy", hex: "#1E3A5F" },
+      { name: "Beige", hex: "#F5F5DC" },
+    ],
+    images: ["/images/products/moleca-flat-1.jpg"],
   },
 ];
 
 export default function HomePage() {
+  const [selectedProduct, setSelectedProduct] = useState<FashionProduct | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleProductClick = (product: FashionProduct) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <>
-      {/* Hero Section */}
-      <HeroSection />
+      {/* Full-Width Fashion Hero */}
+      <FashionHero />
 
-      {/* About Preview Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                About Alberto
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight">
-                Crafting Excellence
-                <br />
-                <span className="text-muted-foreground">Since 1980</span>
-              </h2>
-              <p className="text-lg text-muted-foreground mt-6 leading-relaxed">
-                For over four decades, Alberto Shoes Corporation has been the Philippines' 
-                trusted destination for quality footwear and bags. We believe that every 
-                step should be taken with confidence, and every style should reflect your 
-                unique personality.
-              </p>
-              <p className="text-lg text-muted-foreground mt-4 leading-relaxed">
-                With 80 branches nationwide, we're committed to bringing premium fashion 
-                accessories closer to every Filipino family.
-              </p>
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-8"
-              >
-                <Button variant="outline" size="lg" className="rounded-full" asChild>
-                  <Link href="/about">
-                    Learn More About Us
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-              </motion.div>
-            </motion.div>
+      {/* Brand Logo Strip */}
+      <BrandLogoStrip />
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-secondary to-muted overflow-hidden relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-background/80 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-foreground">A</span>
-                    </div>
-                    <h3 className="text-2xl font-bold text-foreground">Alberto Shoes</h3>
-                    <p className="text-muted-foreground mt-2">Quality & Style Since 1980</p>
-                  </div>
-                </div>
-                {/* Decorative elements */}
-                <div className="absolute top-8 right-8 w-20 h-20 rounded-full bg-background/50 blur-xl" />
-                <div className="absolute bottom-8 left-8 w-32 h-32 rounded-full bg-background/30 blur-2xl" />
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/* Campaign Section 1 - Brand Philosophy */}
+      <CampaignSection
+        title="Crafted for Those Who Walk With Purpose"
+        subtitle="Our Philosophy"
+        description="Every pair we create tells a story of dedication to craft and attention to detail. We believe that great footwear doesn't just complete an outfit—it empowers the person wearing it."
+        image="/images/campaign/philosophy.jpg"
+        imagePosition="left"
+        ctaText="Discover Our Story"
+        ctaLink="/about"
+      />
 
-      {/* Features Section */}
-      <section className="py-20 bg-secondary">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Why Choose Alberto
-            </h2>
-            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-              Experience the difference that over 40 years of excellence brings
-            </p>
-          </motion.div>
+      {/* Parallax Section - Visual Break */}
+      <ParallaxSection
+        image="/images/campaign/parallax-1.jpg"
+        title="Where Style Meets Substance"
+        subtitle="Craftsmanship"
+      />
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-              >
-                <Card className="border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 bg-card h-full">
-                  <CardContent className="p-8 text-center">
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      className="w-16 h-16 mx-auto rounded-2xl bg-secondary flex items-center justify-center mb-6"
-                    >
-                      <feature.icon className="w-8 h-8 text-foreground" />
-                    </motion.div>
-                    <h3 className="text-xl font-semibold text-foreground mb-3">
-                      {feature.title}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Campaign Section 2 - Craftsmanship */}
+      <CampaignSection
+        title="The Art of Fine Footwear"
+        subtitle="Craftsmanship"
+        description="From selecting the finest leathers to the final stitch, every step in our process is guided by a commitment to excellence. Our artisans bring decades of expertise to every pair."
+        image="/images/campaign/craftsmanship.jpg"
+        imagePosition="right"
+        ctaText="Our Craft"
+        ctaLink="/about"
+      />
 
-      {/* Product Categories Section */}
-      <section className="py-24 bg-background">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-              Our Collections
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4">
-              Explore Our Categories
-            </h2>
-            <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
-              From elegant women's footwear to sophisticated men's shoes and stylish bags, 
-              discover the perfect addition to your wardrobe.
-            </p>
-          </motion.div>
+      {/* New Arrivals Carousel */}
+      <NewArrivalsCarousel
+        products={newArrivals}
+        onProductClick={handleProductClick}
+      />
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
-              <motion.div
-                key={category.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-              >
-                <Link href="/products">
-                  <ProductCard {...category} />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+      {/* Brand Spotlight Carousel */}
+      <BrandSpotlightCarousel />
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-center mt-12"
-          >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button size="lg" className="rounded-full px-8" asChild>
-                <Link href="/products">
-                  View All Products
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Parallax Section - Visual Break */}
+      <ParallaxSection
+        image="/images/campaign/parallax-2.jpg"
+        title="Step Into Your Story"
+        subtitle="Collection 2026"
+      />
 
-      {/* Branches Section */}
-      <section className="py-24 bg-secondary relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 rounded-full bg-foreground blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-foreground blur-3xl" />
-        </div>
+      {/* Campaign Section 3 - Comfort & Design */}
+      <CampaignSection
+        title="Comfort That Doesn't Compromise"
+        subtitle="Innovation"
+        description="We've reimagined what comfort means in fashion footwear. Through innovative design and advanced materials, we ensure that every step feels as good as it looks."
+        image="/images/campaign/comfort.jpg"
+        imagePosition="left"
+        ctaText="Explore Technology"
+        ctaLink="/products"
+      />
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-                Nationwide Presence
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground mt-4 leading-tight">
-                80 Branches
-                <br />
-                <span className="text-muted-foreground">Across the Philippines</span>
-              </h2>
-              <p className="text-lg text-muted-foreground mt-6 leading-relaxed">
-                From Metro Manila to Mindanao, Alberto Shoes is never far away. 
-                Visit any of our 80 branches nationwide to experience our quality 
-                products and exceptional customer service firsthand.
-              </p>
 
-              <div className="grid grid-cols-2 gap-6 mt-8">
-                {[
-                  { region: "Metro Manila", count: "20+" },
-                  { region: "Luzon", count: "25+" },
-                  { region: "Visayas", count: "20+" },
-                  { region: "Mindanao", count: "15+" },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.region}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="p-4 rounded-xl bg-background"
-                  >
-                    <div className="text-2xl font-bold text-foreground">{item.count}</div>
-                    <div className="text-sm text-muted-foreground">{item.region}</div>
-                  </motion.div>
-                ))}
-              </div>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-8"
-              >
-                <Button variant="outline" size="lg" className="rounded-full" asChild>
-                  <Link href="/branches">
-                    Find a Branch Near You
-                    <MapPin className="ml-2 w-4 h-4" />
-                  </Link>
-                </Button>
-              </motion.div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              {/* Philippines Map Placeholder */}
-              <div className="aspect-[4/5] rounded-3xl bg-background overflow-hidden relative shadow-xl">
-                <div className="absolute inset-0 p-8 flex flex-col items-center justify-center">
-                  <div className="w-full h-full rounded-2xl bg-gradient-to-br from-secondary to-muted flex items-center justify-center relative">
-                    {/* Stylized map representation */}
-                    <div className="text-center">
-                      <MapPin className="w-16 h-16 text-foreground mx-auto mb-4" />
-                      <h3 className="text-2xl font-bold text-foreground">Philippines</h3>
-                      <p className="text-muted-foreground mt-2">80 Store Locations</p>
-                      
-                      {/* Dots representing branches */}
-                      <div className="mt-8 flex flex-wrap justify-center gap-2 max-w-xs mx-auto">
-                        {Array.from({ length: 20 }).map((_, i) => (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, scale: 0 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.05 }}
-                            className="w-3 h-3 rounded-full bg-foreground/60"
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action Section */}
-      <section className="py-24 bg-foreground text-background">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold leading-tight">
-              Discover Your Perfect Pair Today
-            </h2>
-            <p className="text-lg text-background/70 mt-6 leading-relaxed">
-              Whether you're looking for the perfect dress sandals for a special occasion, 
-              comfortable everyday loafers, or a stylish bag to complete your look — 
-              Alberto has you covered.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-10">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="secondary" className="rounded-full px-8 py-6" asChild>
-                  <Link href="/products">
-                    Browse Collections
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </Link>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
-                  size="lg" 
-                  variant="outline" 
-                  className="rounded-full px-8 py-6 border-background/30 bg-transparent text-background hover:bg-background/10 hover:text-background" 
-                  asChild
-                >
-                  <Link href="/branches">
-                    Visit a Store
-                  </Link>
-                </Button>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Fashion Product Modal */}
+      <FashionProductModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        product={selectedProduct}
+      />
     </>
   );
 }

@@ -27,7 +27,7 @@ export interface Brand {
 }
 
 export const BRAND_SLUGS = [
-  "gng",
+  // "gng",
   "urban-muse",
   "geox",
   "kyo",

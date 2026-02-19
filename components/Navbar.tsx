@@ -10,12 +10,14 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/products", label: "Products" },
+  { href: "/lookbook", label: "Lookbook" },
   { href: "/branches", label: "Branches" },
   { href: "/contact", label: "Contact" },
 ];
 
 const brands = [
-  { href: "/brands/gng", label: "G&G", tagline: "Classic Elegance" },
+  { href: "/brands/alberto", label: "ALBERTO", tagline: "Heritage Craftsmanship" },
+  // { href: "/brands/gng", label: "G&G", tagline: "Classic Elegance" },
   { href: "/brands/urban-muse", label: "URBAN MUSE", tagline: "Modern Style" },
   { href: "/brands/geox", label: "GEOX", tagline: "Breathable Innovation" },
   { href: "/brands/kyo", label: "KYO", tagline: "Modular Freedom" },
@@ -116,9 +118,9 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
             
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="rounded-full px-6">Shop Now</Button>
-            </motion.div>
+            </motion.div> */}
           </div>
 
           {/* Mobile Menu Button */}
@@ -206,13 +208,13 @@ export default function Navbar() {
                   </AnimatePresence>
                 </motion.div>
                 
-                <motion.div
+                {/* <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: (navLinks.length + 1) * 0.1 }}
                 >
                   <Button className="w-full rounded-full mt-4">Shop Now</Button>
-                </motion.div>
+                </motion.div> */}
               </div>
             </motion.div>
           )}

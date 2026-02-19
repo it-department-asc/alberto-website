@@ -172,24 +172,24 @@ The brand embodies the entrepreneurial spirit of experimentation and self-expres
   ],
 };
 
-export const gngBrand: Brand = {
-  slug: "gng",
-  name: "G&G",
-  tagline: "Classic Elegance, Timeless Style",
-  heroImage: "/images/brands/gng-hero.jpg",
-  about: "G&G represents the perfect blend of classic elegance and contemporary fashion. Known for sophisticated designs that transcend seasons, G&G offers footwear that makes a statement while providing exceptional comfort.",
-  story: "G&G has been a cornerstone of Alberto Shoes Corporation, bringing timeless elegance to Filipino fashion enthusiasts for years.",
-  philosophy: "We believe that great style never goes out of fashion. G&G creates pieces that become wardrobe staples, designed to be worn and loved for years to come.",
-  lifestyleDescription: "G&G is for the woman who appreciates the finer things in life—elegant, sophisticated, and always put-together.",
-  lifestyleImage: "/images/brands/gng-lifestyle.jpg",
-  features: [
-    { icon: "Crown", title: "Premium Materials", description: "Only the finest materials for lasting quality." },
-    { icon: "Gem", title: "Elegant Designs", description: "Sophisticated styles for every occasion." },
-    { icon: "Clock", title: "Timeless Appeal", description: "Classic designs that never go out of style." },
-    { icon: "Star", title: "Superior Comfort", description: "Engineered for all-day wearability." },
-  ],
-  products: [],
-};
+// export const gngBrand: Brand = {
+//   slug: "gng",
+//   name: "G&G",
+//   tagline: "Classic Elegance, Timeless Style",
+//   heroImage: "/images/brands/gng-hero.jpg",
+//   about: "G&G represents the perfect blend of classic elegance and contemporary fashion. Known for sophisticated designs that transcend seasons, G&G offers footwear that makes a statement while providing exceptional comfort.",
+//   story: "G&G has been a cornerstone of Alberto Shoes Corporation, bringing timeless elegance to Filipino fashion enthusiasts for years.",
+//   philosophy: "We believe that great style never goes out of fashion. G&G creates pieces that become wardrobe staples, designed to be worn and loved for years to come.",
+//   lifestyleDescription: "G&G is for the woman who appreciates the finer things in life—elegant, sophisticated, and always put-together.",
+//   lifestyleImage: "/images/brands/gng-lifestyle.jpg",
+//   features: [
+//     { icon: "Crown", title: "Premium Materials", description: "Only the finest materials for lasting quality." },
+//     { icon: "Gem", title: "Elegant Designs", description: "Sophisticated styles for every occasion." },
+//     { icon: "Clock", title: "Timeless Appeal", description: "Classic designs that never go out of style." },
+//     { icon: "Star", title: "Superior Comfort", description: "Engineered for all-day wearability." },
+//   ],
+//   products: [],
+// };
 
 export const urbanMuseBrand: Brand = {
   slug: "urban-muse",
@@ -267,14 +267,101 @@ export const molecaBrand: Brand = {
   products: [],
 };
 
+export const albertoBrand: Brand = {
+  slug: "alberto",
+  name: "ALBERTO",
+  tagline: "Crafted for the Discerning Filipino",
+  heroImage: "/images/brands/alberto-hero.jpg",
+  about: `ALBERTO is the flagship house brand of Alberto Shoes Corporation — a name that has been synonymous with quality footwear and accessories in the Philippines for decades. Rooted in heritage and refined through generations of craftsmanship, ALBERTO represents the pinnacle of locally driven fashion excellence.
+
+Every ALBERTO piece reflects a deep respect for quality materials, thoughtful construction, and the sophisticated taste of the modern Filipino consumer.`,
+  story: `Alberto Shoes Corporation was founded with a singular mission: to bring world-class footwear and fashion brands to the Filipino consumer while nurturing homegrown excellence. The ALBERTO house brand was born from that same mission — a direct expression of the corporation's values distilled into a label.
+
+From its early stores to a nationwide retail presence, ALBERTO has grown alongside the evolving tastes of Philippine fashion, always staying ahead while honoring its roots.`,
+  philosophy: `Quality, heritage, and purpose. ALBERTO believes that every pair of shoes tells a story — of the artisan who made them, the person who wears them, and the life they live together.
+
+The brand is committed to delivering products that not only look exceptional but are built to last, reflecting a philosophy that true luxury lies in enduring quality rather than fleeting trends.`,
+  lifestyleDescription: `The ALBERTO customer is confident, cultured, and values the finer things in life without ostentation. Whether stepping into a boardroom, attending a formal occasion, or enjoying a refined casual moment, ALBERTO footwear is the perfect companion.
+
+With curated collections that blend timeless silhouettes with contemporary refinement, ALBERTO dresses the discerning Filipino for every chapter of life.`,
+  lifestyleImage: "/images/brands/alberto-lifestyle.jpg",
+  features: [
+    {
+      icon: "Crown",
+      title: "Heritage Craftsmanship",
+      description: "Decades of expertise poured into every product, honoring traditional techniques with modern precision.",
+    },
+    {
+      icon: "Gem",
+      title: "Premium Materials",
+      description: "Carefully selected leathers, fabrics, and components sourced for their quality and longevity.",
+    },
+    {
+      icon: "Star",
+      title: "Timeless Design",
+      description: "Silhouettes that transcend seasons, designed to remain relevant and refined year after year.",
+    },
+    {
+      icon: "MapPin",
+      title: "Filipino Pride",
+      description: "A brand rooted in Philippine culture, built to serve and celebrate the modern Filipino lifestyle.",
+    },
+  ],
+  products: [
+    {
+      id: "alberto-1",
+      name: "Heritage Oxford",
+      description: "Full-grain leather oxford with hand-stitched detailing and leather sole — the quintessential dress shoe.",
+      image: "/images/products/alberto-oxford.jpg",
+      category: "Men's Footwear",
+    },
+    {
+      id: "alberto-2",
+      name: "Classic Derby",
+      description: "Open-lacing derby in rich calfskin leather, perfect for formal and business occasions.",
+      image: "/images/products/alberto-derby.jpg",
+      category: "Men's Footwear",
+    },
+    {
+      id: "alberto-3",
+      name: "Executive Loafer",
+      description: "Slip-on loafer with penny keeper and cushioned footbed for all-day executive comfort.",
+      image: "/images/products/alberto-loafer.jpg",
+      category: "Men's Footwear",
+    },
+    {
+      id: "alberto-4",
+      name: "Refined Pump",
+      description: "Elegant kitten-heel pump in supple leather, designed for the polished professional woman.",
+      image: "/images/products/alberto-pump.jpg",
+      category: "Women's Footwear",
+    },
+    {
+      id: "alberto-5",
+      name: "Heritage Tote",
+      description: "Structured leather tote with suede lining and brass hardware — a boardroom essential.",
+      image: "/images/products/alberto-tote.jpg",
+      category: "Bags",
+    },
+    {
+      id: "alberto-6",
+      name: "Weekend Derbies",
+      description: "Casual take on the classic derby in nubuck leather, bridging sophistication and leisure.",
+      image: "/images/products/alberto-weekend.jpg",
+      category: "Men's Footwear",
+    },
+  ],
+};
+
 export const brands: Record<string, Brand> = {
   geox: geoxBrand,
   kyo: kyoBrand,
-  gng: gngBrand,
+  // gng: gngBrand,
   "urban-muse": urbanMuseBrand,
   piccadilly: piccadillyBrand,
   vizzano: vizzanoBrand,
   moleca: molecaBrand,
+  alberto: albertoBrand,
 };
 
 export function getBrandBySlug(slug: string): Brand | undefined {
