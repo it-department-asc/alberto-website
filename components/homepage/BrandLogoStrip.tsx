@@ -4,23 +4,18 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 
-interface Brand {
+export interface BrandLogoItem {
   name: string;
   slug: string;
   logo?: string;
 }
 
-const brands: Brand[] = [
-  // { name: "G&G", slug: "gng" },
-  { name: "URBAN MUSE", slug: "urban-muse" },
-  { name: "GEOX", slug: "geox" },
-  { name: "KYO", slug: "kyo" },
-  { name: "PICCADILLY", slug: "piccadilly" },
-  { name: "VIZZANO", slug: "vizzano" },
-  { name: "MOLECA", slug: "moleca" },
-];
+interface BrandLogoStripProps {
+  brands?: BrandLogoItem[];
+}
 
-export default function BrandLogoStrip() {
+export default function BrandLogoStrip({ brands: brandsProp }: BrandLogoStripProps) {
+  const brands = brandsProp || [];
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (

@@ -15,18 +15,18 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-const brands = [
-  { href: "/brands/alberto", label: "ALBERTO", tagline: "Heritage Craftsmanship" },
-  // { href: "/brands/gng", label: "G&G", tagline: "Classic Elegance" },
-  { href: "/brands/urban-muse", label: "URBAN MUSE", tagline: "Modern Style" },
-  { href: "/brands/geox", label: "GEOX", tagline: "Breathable Innovation" },
-  { href: "/brands/kyo", label: "KYO", tagline: "Modular Freedom" },
-  { href: "/brands/piccadilly", label: "PICCADILLY", tagline: "Comfort & Fashion" },
-  { href: "/brands/vizzano", label: "VIZZANO", tagline: "Trendy & Bold" },
-  { href: "/brands/moleca", label: "MOLECA", tagline: "Youth & Energy" },
-];
+export interface NavBrand {
+  href: string;
+  label: string;
+  tagline: string;
+}
 
-export default function Navbar() {
+interface NavbarProps {
+  brands?: NavBrand[];
+}
+
+export default function Navbar({ brands: brandsProp }: NavbarProps) {
+  const brands = brandsProp || [];
   const [isOpen, setIsOpen] = useState(false);
   const [isBrandsOpen, setIsBrandsOpen] = useState(false);
   const [isMobileBrandsOpen, setIsMobileBrandsOpen] = useState(false);

@@ -51,11 +51,14 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 interface BrandFeaturesProps {
-  features: BrandFeature[];
+  features?: BrandFeature[] | null;
   brandName: string;
 }
 
 export default function BrandFeatures({ features, brandName }: BrandFeaturesProps) {
+  const items = features || [];
+
+  if (items.length === 0) return null;
   return (
     <section className="py-24 bg-secondary">
       <div className="container mx-auto px-6">
@@ -75,7 +78,7 @@ export default function BrandFeatures({ features, brandName }: BrandFeaturesProp
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => {
+          {items.map((feature, index) => {
             const IconComponent = iconMap[feature.icon] || Star;
             
             return (

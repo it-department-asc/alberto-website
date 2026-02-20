@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
-interface BrandSpotlight {
+export interface BrandSpotlightItem {
   id: string;
   name: string;
   slug: string;
@@ -14,66 +14,12 @@ interface BrandSpotlight {
   image: string;
 }
 
-const brands: BrandSpotlight[] = [
-  // {
-  //   id: "1",
-  //   name: "G&G",
-  //   slug: "gng",
-  //   tagline: "Timeless Elegance",
-  //   story: "Where sophistication meets modern design. G&G crafts footwear that transcends trends, creating timeless pieces for the discerning woman who values both style and substance.",
-  //   image: "/images/brands/gg-spotlight.jpg",
-  // },
-  {
-    id: "2",
-    name: "URBAN MUSE",
-    slug: "urban-muse",
-    tagline: "City Chic Redefined",
-    story: "For the urban explorer who refuses to compromise. Urban Muse blends metropolitan sophistication with everyday comfort, designed for women who move through life with purpose and grace.",
-    image: "/images/brands/urban-muse-spotlight.jpg",
-  },
-  {
-    id: "3",
-    name: "GEOX",
-    slug: "geox",
-    tagline: "The Shoe That Breathes",
-    story: "Revolutionary technology meets Italian design. Geox's patented breathable soles ensure comfort from morning to night, proving that innovation and style can coexist beautifully.",
-    image: "/images/brands/geox-spotlight.jpg",
-  },
-  {
-    id: "4",
-    name: "KYO",
-    slug: "kyo",
-    tagline: "Contemporary Craft",
-    story: "Minimalist aesthetics meet exceptional craftsmanship. KYO creates footwear that speaks softly but carries unmistakable presence, for those who appreciate understated luxury.",
-    image: "/images/brands/kyo-spotlight.jpg",
-  },
-  {
-    id: "5",
-    name: "PICCADILLY",
-    slug: "piccadilly",
-    tagline: "Comfort Without Compromise",
-    story: "Brazilian innovation meets global style. Piccadilly has revolutionized comfortable footwear, proving that you never have to choose between feeling good and looking great.",
-    image: "/images/brands/piccadilly-spotlight.jpg",
-  },
-  {
-    id: "6",
-    name: "VIZZANO",
-    slug: "vizzano",
-    tagline: "Bold & Beautiful",
-    story: "For the woman who makes an entrance. Vizzano creates statement pieces that celebrate femininity and confidence, designed to turn heads and spark conversations.",
-    image: "/images/brands/vizzano-spotlight.jpg",
-  },
-  {
-    id: "7",
-    name: "MOLECA",
-    slug: "moleca",
-    tagline: "Everyday Elegance",
-    story: "Accessible luxury for the modern woman. Moleca brings fashion-forward designs within reach, ensuring every woman can step out in style, every single day.",
-    image: "/images/brands/moleca-spotlight.jpg",
-  },
-];
+interface BrandSpotlightCarouselProps {
+  brands?: BrandSpotlightItem[];
+}
 
-export default function BrandSpotlightCarousel() {
+export default function BrandSpotlightCarousel({ brands: brandsProp }: BrandSpotlightCarouselProps) {
+  const brands = brandsProp || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -97,6 +43,8 @@ export default function BrandSpotlightCarousel() {
   }, [paginate]);
 
   const currentBrand = brands[currentIndex];
+
+  if (!brands.length || !currentBrand) return null;
 
   const slideVariants = {
     enter: (direction: number) => ({

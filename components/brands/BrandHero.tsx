@@ -15,7 +15,7 @@ export default function BrandHero({ name, tagline, heroImage }: BrandHeroProps) 
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
         {heroImage && (
           <div 
-            className="absolute inset-0 opacity-30 bg-cover bg-center"
+            className="absolute inset-0 opacity-30 bg-cover bg-top"
             style={{ backgroundImage: `url(${heroImage})` }}
           />
         )}

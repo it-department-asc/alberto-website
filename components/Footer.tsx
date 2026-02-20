@@ -31,7 +31,14 @@ const socialLinks = [
   { href: "#", icon: Twitter, label: "Twitter" },
 ];
 
-export default function Footer() {
+export interface FooterProps {
+  description?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+}
+
+export default function Footer({ description, phone, email, address }: FooterProps) {
   return (
     <footer className="bg-secondary border-t border-border">
       <div className="container mx-auto px-6 py-16">
@@ -46,13 +53,11 @@ export default function Footer() {
             >
               <Link href="/" className="inline-block">
                 <span className="text-3xl font-bold tracking-tight text-foreground">
-                  ALBERTO
+                  ALBERTO GROUP
                 </span>
               </Link>
               <p className="mt-4 text-muted-foreground max-w-md leading-relaxed">
-                Alberto Shoes Corporation has been the Philippines' trusted destination 
-                for quality footwear and bags. With 80 branches nationwide, we bring 
-                style and comfort closer to every Filipino.
+                {description || ""}
               </p>
               <div className="flex space-x-4 mt-6">
                 {socialLinks.map((social) => (
@@ -122,18 +127,24 @@ export default function Footer() {
           >
             <h3 className="font-semibold text-foreground mb-4">Contact</h3>
             <ul className="space-y-3">
-              <li className="flex items-center space-x-3 text-muted-foreground">
-                <MapPin className="w-4 h-4 flex-shrink-0" />
-                <span>Philippines (80 Branches)</span>
-              </li>
-              <li className="flex items-center space-x-3 text-muted-foreground">
-                <Phone className="w-4 h-4 flex-shrink-0" />
-                <span>+63 (2) 8123 4567</span>
-              </li>
-              <li className="flex items-center space-x-3 text-muted-foreground">
-                <Mail className="w-4 h-4 flex-shrink-0" />
-                <span>info@albertoshoes.ph</span>
-              </li>
+              {address && (
+                <li className="flex items-center space-x-3 text-muted-foreground">
+                  <MapPin className="w-4 h-4 flex-shrink-0" />
+                  <span>{address}</span>
+                </li>
+              )}
+              {phone && (
+                <li className="flex items-center space-x-3 text-muted-foreground">
+                  <Phone className="w-4 h-4 flex-shrink-0" />
+                  <span>{phone}</span>
+                </li>
+              )}
+              {email && (
+                <li className="flex items-center space-x-3 text-muted-foreground">
+                  <Mail className="w-4 h-4 flex-shrink-0" />
+                  <span>{email}</span>
+                </li>
+              )}
             </ul>
           </motion.div>
         </div>
