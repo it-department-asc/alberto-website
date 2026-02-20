@@ -14,14 +14,15 @@ import {
 import type { BrandProduct } from "@/lib/types/brand";
 
 interface BrandProductShowcaseProps {
-  products: BrandProduct[];
+  products?: BrandProduct[] | null;
   brandName: string;
 }
 
 export default function BrandProductShowcase({ products, brandName }: BrandProductShowcaseProps) {
+  const items = products || [];
   const [selectedProduct, setSelectedProduct] = useState<BrandProduct | null>(null);
 
-  if (products.length === 0) {
+  if (items.length === 0) {
     return (
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6">
@@ -69,7 +70,7 @@ export default function BrandProductShowcase({ products, brandName }: BrandProdu
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
+          {items.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 30 }}

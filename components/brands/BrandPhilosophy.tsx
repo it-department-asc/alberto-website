@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 interface BrandPhilosophyProps {
-  philosophy: string;
+  philosophy?: string | null;
   brandName: string;
 }
 
@@ -44,7 +44,7 @@ export default function BrandPhilosophy({ philosophy, brandName }: BrandPhilosop
 
             <div className="bg-gradient-to-br from-secondary to-muted rounded-3xl p-10 md:p-16">
               <div className="space-y-6">
-                {philosophy.split('\n\n').map((paragraph, index) => (
+                {(philosophy || '').split('\n\n').filter(Boolean).map((paragraph, index) => (
                   <p 
                     key={index} 
                     className="text-xl md:text-2xl text-foreground/90 leading-relaxed font-light"

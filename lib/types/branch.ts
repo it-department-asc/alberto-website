@@ -1,4 +1,4 @@
-export type Brand = "ALBERTO" | /* "G&G" | */ "KYO" | "GEOX" | "PICCADILLY";
+export type Brand = "ALBERTO" | "KYO" | "GEOX" | "PICCADILLY" | "URBAN MUSE" | "VIZZANO" | "MOLECA";
 
 export type BranchType = "STAND ALONE" | "HYBRID";
 
@@ -10,7 +10,8 @@ export interface Branch {
   city: string;
   lessor: string;
   mallName: string;
-  brands: Brand[];
+  image?: string;
+  brands: string[];
   branchType: BranchType;
   coordinates?: {
     lat: number;
@@ -25,7 +26,7 @@ export interface BranchFilters {
   region: string;
 }
 
-export const BRANDS: Brand[] = ["ALBERTO", /* "G&G", */ "KYO", "GEOX", "PICCADILLY"];
+export const BRANDS: Brand[] = ["ALBERTO", "KYO", "GEOX", "PICCADILLY", "URBAN MUSE", "VIZZANO", "MOLECA"];
 
 export const LESSORS = [
   "SM",

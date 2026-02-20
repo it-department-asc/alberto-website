@@ -27,7 +27,7 @@ interface BranchDetailModalProps {
   onClose: () => void;
 }
 
-const brandColors: Record<Brand, string> = {
+const brandColors: Record<string, string> = {
   ALBERTO: "bg-gray-100 text-gray-800",
   "G&G": "bg-emerald-100 text-emerald-800",
   KYO: "bg-blue-100 text-blue-800",

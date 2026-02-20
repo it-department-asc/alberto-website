@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 interface BrandAboutProps {
   name: string;
-  about: string;
-  story: string;
+  about?: string | null;
+  story?: string | null;
 }
 
 export default function BrandAbout({ name, about, story }: BrandAboutProps) {
@@ -27,7 +27,7 @@ export default function BrandAbout({ name, about, story }: BrandAboutProps) {
               The {name} Story
             </h2>
             <div className="space-y-4">
-              {about.split('\n\n').map((paragraph, index) => (
+              {(about || '').split('\n\n').filter(Boolean).map((paragraph, index) => (
                 <p key={index} className="text-lg text-muted-foreground leading-relaxed">
                   {paragraph}
                 </p>
@@ -51,7 +51,7 @@ export default function BrandAbout({ name, about, story }: BrandAboutProps) {
                 How It All Began
               </h3>
               <div className="space-y-4">
-                {story.split('\n\n').map((paragraph, index) => (
+                {(story || '').split('\n\n').filter(Boolean).map((paragraph, index) => (
                   <p key={index} className="text-muted-foreground leading-relaxed">
                     {paragraph}
                   </p>

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 
 interface BrandLifestyleProps {
-  description: string;
+  description?: string | null;
   image?: string;
   brandName: string;
 }
@@ -60,7 +60,7 @@ export default function BrandLifestyle({ description, image, brandName }: BrandL
               The {brandName} Experience
             </h2>
             <div className="space-y-6">
-              {description.split('\n\n').map((paragraph, index) => (
+              {(description || '').split('\n\n').filter(Boolean).map((paragraph, index) => (
                 <p key={index} className="text-lg text-muted-foreground leading-relaxed">
                   {paragraph}
                 </p>

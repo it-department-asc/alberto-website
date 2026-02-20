@@ -1,5 +1,8 @@
 import { notFound } from "next/navigation";
-import { getBrandBySlug, getAllBrands } from "@/lib/data/brands";
+import { client, sanityFetch } from "@/sanity/client";
+import { urlFor } from "@/sanity/image";
+import { BRAND_BY_SLUG_QUERY, ALL_BRANDS_QUERY } from "@/sanity/queries";
+import type { SanityBrand } from "@/sanity/types";
 import {
   BrandHero,
   BrandAbout,
@@ -14,15 +17,15 @@ interface BrandPageProps {
 }
 
 export async function generateStaticParams() {
-  const brands = getAllBrands();
+  const brands = await client.fetch<SanityBrand[]>(ALL_BRANDS_QUERY);
   return brands.map((brand) => ({
-    slug: brand.slug,
+    slug: brand.slug.current,
   }));
 }
 
 export async function generateMetadata({ params }: BrandPageProps) {
   const { slug } = await params;
-  const brand = getBrandBySlug(slug);
+  const { data: brand } = await sanityFetch<SanityBrand | null>({ query: BRAND_BY_SLUG_QUERY, params: { slug } });
   
   if (!brand) {
     return {
@@ -38,18 +41,32 @@ export async function generateMetadata({ params }: BrandPageProps) {
 
 export default async function BrandPage({ params }: BrandPageProps) {
   const { slug } = await params;
-  const brand = getBrandBySlug(slug);
+  const { data: brand } = await sanityFetch<SanityBrand | null>({ query: BRAND_BY_SLUG_QUERY, params: { slug } });
 
   if (!brand) {
     notFound();
   }
+
+  const heroImageUrl = brand.heroImage
+    ? urlFor(brand.heroImage).width(1920).height(1080).fit("crop").auto("format").url()
+    : "";
+  
+  const lifestyleImageUrl = brand.lifestyleImage
+    ? urlFor(brand.lifestyleImage).width(960).height(1200).fit("crop").auto("format").url()
+    : "";
+
+  // Map brand products to include resolved image URLs
+  const products = (brand.products || []).map((p) => ({
+    ...p,
+    image: p.image ? urlFor(p.image).width(800).height(1067).fit("crop").auto("format").url() : "",
+  }));
 
   return (
     <main className="min-h-screen">
       <BrandHero
         name={brand.name}
         tagline={brand.tagline}
-        heroImage={brand.heroImage}
+        heroImage={heroImageUrl}
       />
       
       <BrandAbout
@@ -70,12 +87,12 @@ export default async function BrandPage({ params }: BrandPageProps) {
       
       <BrandLifestyle
         description={brand.lifestyleDescription}
-        image={brand.lifestyleImage}
+        image={lifestyleImageUrl}
         brandName={brand.name}
       />
       
       <BrandProductShowcase
-        products={brand.products}
+        products={products}
         brandName={brand.name}
       />
     </main>

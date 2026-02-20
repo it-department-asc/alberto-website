@@ -46,13 +46,17 @@ export default function BranchCard({
         )}
 
         <div className="flex gap-3">
-          {/* Lessor Icon */}
+          {/* Branch Image / Lessor Icon */}
           <div className={`
-            flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold
-            ${isSelected ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 group-hover:bg-gray-200"}
+            flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold overflow-hidden
+            ${!branch.image ? (isSelected ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 group-hover:bg-gray-200") : ""}
             transition-all
           `}>
-            {branch.lessor.slice(0, 2).toUpperCase()}
+            {branch.image ? (
+              <img src={branch.image} alt={branch.mallName} className="w-full h-full object-cover" />
+            ) : (
+              (branch.lessor || "").slice(0, 2).toUpperCase()
+            )}
           </div>
 
           {/* Content */}

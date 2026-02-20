@@ -6,7 +6,27 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 
-export default function FashionHero() {
+export interface FashionHeroProps {
+  heroImage?: string;
+  heroTagline?: string;
+  heroHeadline?: string;
+  heroHeadlineItalic?: string;
+  heroSubtext?: string;
+  heroCTAText?: string;
+  heroCTALink?: string;
+  heroSideText?: string;
+}
+
+export default function FashionHero({
+  heroImage,
+  heroTagline,
+  heroHeadline,
+  heroHeadlineItalic,
+  heroSubtext,
+  heroCTAText,
+  heroCTALink,
+  heroSideText,
+}: FashionHeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -30,18 +50,22 @@ export default function FashionHero() {
         {/* Gradient overlay for elegant look */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60 z-10" />
         
-        {/* Background Image - Replace with actual campaign image */}
-        <div 
-          className="absolute inset-0 bg-neutral-900"
-          style={{
-            backgroundImage: `url('/images/hero-campaign.jpg')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-        />
+        {/* Background Image */}
+        {heroImage && (
+          <div 
+            className="absolute inset-0 bg-neutral-900"
+            style={{
+              backgroundImage: `url('${heroImage}')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+        )}
         
         {/* Fallback gradient when no image */}
-        <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 via-neutral-900 to-black" />
+        {!heroImage && (
+          <div className="absolute inset-0 bg-gradient-to-br from-neutral-800 via-neutral-900 to-black" />
+        )}
       </motion.div>
 
       {/* Content */}
@@ -58,59 +82,70 @@ export default function FashionHero() {
         />
 
         {/* Small tagline */}
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="text-xs tracking-[0.4em] uppercase text-white/70 mb-6"
-        >
-          Spring/Summer Collection 2026
-        </motion.span>
+        {heroTagline && (
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-xs tracking-[0.4em] uppercase text-white/70 mb-6"
+          >
+            {heroTagline}
+          </motion.span>
+        )}
 
         {/* Main Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-light text-white tracking-tight leading-[0.95]"
-        >
-          Elegance
-          <br />
-          <span className="font-extralight italic">Redefined</span>
-        </motion.h1>
+        {(heroHeadline || heroHeadlineItalic) && (
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-light text-white tracking-tight leading-[0.95]"
+          >
+            {heroHeadline}
+            <br />
+            <span className="font-extralight italic">{heroHeadlineItalic}</span>
+          </motion.h1>
+        )}
 
         {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-8 text-lg md:text-xl text-white/80 font-light max-w-xl leading-relaxed tracking-wide"
-        >
-          Where craftsmanship meets contemporary design.
-          <br className="hidden md:block" />
-          Discover footwear that tells your story.
-        </motion.p>
+        {heroSubtext && (
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="mt-8 text-lg md:text-xl text-white/80 font-light max-w-xl leading-relaxed tracking-wide"
+          >
+            {heroSubtext.split('\n').map((line, i) => (
+              <span key={i}>
+                {i > 0 && <br className="hidden md:block" />}
+                {line}
+              </span>
+            ))}
+          </motion.p>
+        )}
 
         {/* CTA Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.1 }}
-          className="mt-12"
-        >
-          <Link href="/products">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="group px-10 py-4 bg-white text-neutral-900 text-sm tracking-widest uppercase font-medium transition-all duration-500 hover:bg-neutral-100"
-            >
-              <span className="flex items-center gap-3">
-                Discover the Collection
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-            </motion.button>
-          </Link>
-        </motion.div>
+        {heroCTAText && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.1 }}
+            className="mt-12"
+          >
+            <Link href={heroCTALink || '/products'}>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="group px-10 py-4 bg-white text-neutral-900 text-sm tracking-widest uppercase font-medium transition-all duration-500 hover:bg-neutral-100"
+              >
+                <span className="flex items-center gap-3">
+                  {heroCTAText}
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                </span>
+              </motion.button>
+            </Link>
+          </motion.div>
+        )}
 
         {/* Decorative line */}
         <motion.div
@@ -139,16 +174,18 @@ export default function FashionHero() {
       </motion.div>
 
       {/* Side decorative text */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute left-8 top-1/2 -translate-y-1/2 z-20 hidden lg:block"
-      >
-        <span className="text-xs tracking-[0.3em] text-white/40 uppercase writing-vertical">
-          Alberto · Est. 1980
-        </span>
-      </motion.div>
+      {heroSideText && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="absolute left-8 top-1/2 -translate-y-1/2 z-20 hidden lg:block"
+        >
+          <span className="text-xs tracking-[0.3em] text-white/40 uppercase writing-vertical">
+            {heroSideText}
+          </span>
+        </motion.div>
+      )}
     </section>
   );
 }
